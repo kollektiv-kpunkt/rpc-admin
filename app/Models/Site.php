@@ -30,11 +30,16 @@ class Site extends Model
     /**
      * Find a site by id, name or url.
      */
-    public static function findInAny($query)
+    public static function findInAnyOrFail($query)
     {
-        return self::where('id', $query)
+        $site = self::where('id', $query)
             ->orWhere('name', $query)
             ->orWhere('url', "LIKE", "%{$query}%")
             ->first();
+        if (!$site) {
+            abort(404);
+        } else {
+            return $site;
+        }
     }
 }

@@ -14,9 +14,14 @@ class SupporterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $site = Site::findInAnyOrFail($request->route()->parameter("site"));
+        $supporters = Supporter::where("site_id", $site->id)->get();
+        return view("sites.supporters.index",[
+            "site" => $site,
+            "supporters" => $supporters
+        ]);
     }
 
     /**
@@ -57,9 +62,12 @@ class SupporterController extends Controller
      * @param  \App\Models\Supporter  $supporter
      * @return \Illuminate\Http\Response
      */
-    public function edit(Supporter $supporter)
+    public function edit(Site $site, Supporter $supporter)
     {
-        //
+        return view("sites.supporters.edit", [
+            "site" => $site,
+            "supporter" => $supporter
+        ]);
     }
 
     /**
@@ -69,9 +77,17 @@ class SupporterController extends Controller
      * @param  \App\Models\Supporter  $supporter
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Supporter $supporter)
+    public function update(Request $request, Site $site, Supporter $supporter)
     {
-        //
+        $validated = $request->validate([
+            "uuid" => "required|string",
+            "name" => "required|string",
+            "email" => "required|email",
+            "data" => "required|array"
+        ]);
+        $supporter->fill($validated);
+        $supporter->save();
+        return redirect()->route("sites.supporters.index", ["site"=>$site]);
     }
 
     /**
@@ -83,7 +99,7 @@ class SupporterController extends Controller
     public function destroy(Supporter $supporter)
     {
         $supporter->delete();
-        return redirect()->route('sites.supporters', $supporter->site_id);
+        return redirect()->route('sites.supporters.index', $supporter->site_id);
     }
 
     /**
@@ -92,19 +108,7 @@ class SupporterController extends Controller
     public function ApiGet($site)
     {
 
-        $site = \App\Models\Site::findInAny($site);
-        if (!$site) {
-            return response()->json([
-                "code" => 404,
-                "status" => "error",
-                "message" => "Site not found"
-            ],
-            404,
-            [
-                'Content-Type' => 'application/json',
-                'Charset' => 'utf-8'
-            ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-        }
+        $site = \App\Models\Site::findInAnyOrFail($site);
         $supporters = Supporter::where('site_id', $site->id)->get();
         return response()->json([
             "code" => 200,
@@ -127,19 +131,7 @@ class SupporterController extends Controller
     public function ApiPost($site, ApiStoreRequest $request)
     {
         $data = $request->validated();
-        $site = \App\Models\Site::findInAny($site);
-        if (!$site) {
-            return response()->json([
-                "code" => 404,
-                "status" => "error",
-                "message" => "Site not found"
-            ],
-            404,
-            [
-                'Content-Type' => 'application/json',
-                'Charset' => 'utf-8'
-            ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-        }
+        $site = \App\Models\Site::findInAnyOrFail($site);
         $supporter = Supporter::where("uuid", $data["uuid"])->first();
         if (!$supporter) {
             $supporter = new Supporter();
@@ -164,7 +156,7 @@ class SupporterController extends Controller
     {
         $supporter->status = "active";
         $supporter->save();
-        return redirect()->route('sites.supporters', $supporter->site_id);
+        return redirect()->route('sites.supporters.index', $supporter->site_id);
     }
 
     /**
@@ -174,7 +166,7 @@ class SupporterController extends Controller
     {
         $supporter->status = "inactive";
         $supporter->save();
-        return redirect()->route('sites.supporters', $supporter->site_id);
+        return redirect()->route('sites.supporters.index', $supporter->site_id);
     }
 
     /**
@@ -184,7 +176,7 @@ class SupporterController extends Controller
     {
         $supporters = Supporter::where('site_id', $site->id)->get();
         if (!$supporters->count()) {
-            return redirect()->route('sites.supporters', $site->id);
+            return redirect()->route('sites.supporters.index', $site->id);
         }
         $filename = "supporters-" . $site->name . "-" . date("Y-m-d") . ".csv";
         $fields = [

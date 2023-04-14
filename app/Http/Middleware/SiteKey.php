@@ -16,13 +16,7 @@ class SiteKey
      */
     public function handle(Request $request, Closure $next)
     {
-        $site = \App\Models\Site::findInAny($request->site);
-        if (!$site) {
-            return response()->json([
-                "code" => 404,
-                "status" => "not found"
-            ]);
-        }
+        $site = \App\Models\Site::findInAnyOrFail($request->site);
         if ($request->header("X-Site-Key") !== $site->key) {
             return response()->json([
                 "code" => 403,

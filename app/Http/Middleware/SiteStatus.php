@@ -16,7 +16,7 @@ class SiteStatus
      */
     public function handle(Request $request, Closure $next)
     {
-        $site = \App\Models\Site::findInAny($request->site);
+        $site = \App\Models\Site::findInAnyOrFail($request->site);
         if (!$site) {
             return response()->json([
                 "code" => 404,

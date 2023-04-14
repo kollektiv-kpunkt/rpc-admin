@@ -41,6 +41,7 @@
                             <button type="submit" class="text-orange-500 hover:text-orange-700">{{ __('Deaktivieren') }}</button>
                         </form>
                         @endif
+                        <a href="{{ route('sites.supporters.edit', [$site, $supporter]) }}" class="text-purple-500 hover:text-purple-900">Bearbeiten</a>
                     </td>
                 </tr>
             @endforeach

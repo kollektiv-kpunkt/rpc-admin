@@ -101,7 +101,7 @@ class UserController extends Controller
 
     public function WPUser(Request $request)
     {
-        $site = \App\Models\Site::findInAny($request->site);
+        $site = \App\Models\Site::findInAnyOrFail($request->site);
         if (!$site) {
             return response()->json([
                 "error" => "Site not found"

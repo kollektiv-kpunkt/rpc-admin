@@ -46,15 +46,12 @@ Route::middleware(['auth', 'verified'])->prefix("admin")->group(function() {
     Route::put('supporters/{supporter}/deactivate', [SupporterController::class, 'deactivate'])->name('supporters.deactivate');
 
     Route::middleware("site")->prefix("sites")->group(function () {
-        Route::get('{site}/supporters', function(){
-            $site = \App\Models\Site::findInAny(request()->route('site'));
-            return view("sites.supporters", [
-                "site" => $site,
-                "supporters" => \App\Models\Supporter::where('site_id', $site->id)->get()
-            ]);
-        })->name('sites.supporters');
-
-        Route::get('{site}/supporters/export', [SupporterController::class, "export"])->name('sites.supporters.export');
+        Route::prefix("{site}")->group(function() {
+            Route::get('supporters', [SupporterController::class, "index"])->name('sites.supporters.index');
+            Route::get('supporters/edit/{supporter}', [SupporterController::class, "edit"])->name('sites.supporters.edit');
+            Route::put('supporters/edit/{supporter}', [SupporterController::class, "update"])->name('sites.supporters.update');
+            Route::get('supporters/export', [SupporterController::class, "export"])->name('sites.supporters.export');
+        });
     });
 });
 

@@ -53,10 +53,7 @@ class User extends Authenticatable
 
     public function hasAccessToSite($site): bool
     {
-        $site = \App\Models\Site::findInAny($site);
-        if (!$site) {
-            return false;
-        }
+        $site = \App\Models\Site::findInAnyOrFail($site);
         $siteId = $site->id;
         return in_array($siteId, $this->sites);
     }
