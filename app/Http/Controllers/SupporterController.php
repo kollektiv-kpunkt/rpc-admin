@@ -107,7 +107,10 @@ class SupporterController extends Controller
         return response()->json([
             "code" => 200,
             "status" => "ok",
-            "data" => $supporters
+            "data" => [
+                "count" => $supporters->count(),
+                "supporters" => $supporters
+            ]
         ],
         200,
         [
