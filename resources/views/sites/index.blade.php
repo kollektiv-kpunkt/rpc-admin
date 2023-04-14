@@ -24,7 +24,7 @@
                     <td>{{ $site->name }}</td>
                     <td>{{ $site->url }}</td>
                     <td>{{ $site->status }}</td>
-                    <td style="max-width: 100px;"><input type="password" name="" id="" value="{{$site->key}}" class="bg-transparent border-none px-0"><em class="block underline" onclick="showKey(event,this)">Show</em></td>
+                    <td style="max-width: 150px;"><input type="password" name="" id="" value="{{$site->key}}" class="bg-gray-300 border-none px-2"><em class="block underline" onclick="showKey(event,this)">Show</em></td>
                     <td>
                         <a href="{{ route('sites.edit', $site) }}" class="underline">{{ __('Bearbeiten') }}</a>
                         <form action="{{ route('sites.destroy', $site) }}" method="POST">
