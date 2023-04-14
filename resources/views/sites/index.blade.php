@@ -11,6 +11,7 @@
     @else
     <table>
         <tr>
+            <th>{{ __('ID') }}</th>
             <th>{{ __('Name') }}</th>
             <th>{{ __('URL') }}</th>
             <th>{{ __('Status') }}</th>
@@ -19,6 +20,7 @@
         </tr>
         @foreach ($sites as $site)
             <tr>
+                <td>{{ $site->id }}</td>
                 <td>{{ $site->name }}</td>
                 <td>{{ $site->url }}</td>
                 <td>{{ $site->status }}</td>
