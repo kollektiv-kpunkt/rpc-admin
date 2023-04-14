@@ -24,7 +24,9 @@ class Authenticate extends Middleware
     {
         $this->authenticate($request, $guards);
         if (auth()->user()->admin_activation == false && !auth()->user()->hasRole("admin")) {
-            return redirect()->route('welcome');
+            return response()->json([
+                "message" => "Your account is not activated yet. Please contact the administrator."
+            ], 403);
         }
         return $next($request);
     }
