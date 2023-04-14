@@ -23,7 +23,7 @@ Route::get("/heartbeat", function () {
     ]);
 });
 
-Route::prefix("supporters")->group( function() {
+Route::middleware("siteStatus")->prefix("supporters")->group( function() {
     Route::middleware("sitekey")->get("{site}", [SupporterController::class, 'ApiGet']);
     Route::post("{site}", [SupporterController::class, 'ApiPost']);
 });

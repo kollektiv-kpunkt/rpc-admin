@@ -66,5 +66,6 @@ class Kernel extends HttpKernel
         'role' => \App\Http\Middleware\RoleMiddleware::class,
         "site" => \App\Http\Middleware\SiteMiddleware::class,
         "sitekey" => \App\Http\Middleware\SiteKey::class,
+        "siteStatus" => \App\Http\Middleware\SiteStatus::class,
     ];
 }
