@@ -1,7 +1,7 @@
 <x-app-layout :title="__('Supporter bearbeiten')">
 
     <x-admin-container>
-        <form method="POST" action="{{ route('sites.supporters.update', ["site" => $site, "supporter" => $supporter]) }}" class="max-w-xl flex flex-col gap-4">
+        <form method="POST" action="{{ route('sites.supporters.update', ["site" => $site, "supporter" => $supporter]) }}" class="max-w-xl flex flex-col gap-4 mx-auto">
             @csrf
             @method('PUT')
             <div class="opacity-50">
