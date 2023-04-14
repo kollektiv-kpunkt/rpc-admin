@@ -17,7 +17,7 @@ class SupporterController extends Controller
     public function index(Request $request)
     {
         $site = Site::findInAnyOrFail($request->route()->parameter("site"));
-        $supporters = Supporter::where("site_id", $site->id)->get();
+        $supporters = Supporter::where("site_id", $site->id)->sortByDesc("created_at")->get();
         return view("sites.supporters.index",[
             "site" => $site,
             "supporters" => $supporters
