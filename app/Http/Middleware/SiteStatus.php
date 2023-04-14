@@ -16,7 +16,14 @@ class SiteStatus
      */
     public function handle(Request $request, Closure $next)
     {
-        if($request->route()->parameter("site")->status != "live") {
+        $site = \App\Models\Site::findInAny($request->site);
+        if (!$site) {
+            return response()->json([
+                "code" => 404,
+                "status" => "not found"
+            ]);
+        }
+        if($site->status != "live") {
             return response()->json([
                 "code" => 503,
                 "status" => "Service Unavailable"
