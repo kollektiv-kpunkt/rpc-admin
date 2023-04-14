@@ -1,0 +1,17 @@
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    display: table;
+
+    th {
+        text-align: left;
+        @apply text-gray-700 bg-gray-200;
+    }
+
+    td,
+    th {
+        border-bottom: 1px solid theme("colors.gray.300");
+        padding: 0.5rem;
+    }
+}
