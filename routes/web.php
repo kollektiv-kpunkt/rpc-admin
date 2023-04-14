@@ -34,6 +34,8 @@ Route::middleware(['auth', 'verified'])->prefix("admin")->group(function() {
     Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    Route::put("users/{user}/activate", [UserController::class, 'activate'])->name('users.activate');
+
     Route::middleware("role:admin")->group(function () {
         Route::resource('users', UserController::class);
         Route::resource('sites', SiteController::class);

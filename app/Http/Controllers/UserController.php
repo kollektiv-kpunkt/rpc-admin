@@ -14,8 +14,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        // TODO: Implement this method
-        return "User Index";
+        return view('users.index', [
+            'users' => User::all()
+        ]);
     }
 
     /**
@@ -82,6 +83,16 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         //
+    }
+
+    /**
+     * Activate a user
+     */
+    public function activate(User $user)
+    {
+        $user->admin_activation = true;
+        $user->save();
+        return redirect()->route('users.index');
     }
 
     public function WPUser(Request $request)
