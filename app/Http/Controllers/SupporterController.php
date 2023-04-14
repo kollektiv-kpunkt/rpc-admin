@@ -124,6 +124,7 @@ class SupporterController extends Controller
      */
     public function ApiPost($site, ApiStoreRequest $request)
     {
+        $data = $request->validated();
         $site = \App\Models\Site::findInAny($site);
         if (!$site) {
             return response()->json([
@@ -137,7 +138,10 @@ class SupporterController extends Controller
                 'Charset' => 'utf-8'
             ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         }
-        $supporter = new Supporter();
+        $supporter = Supporter::where("uuid", $data["uuid"])->first();
+        if (!$supporter) {
+            $supporter = new Supporter();
+        }
         $supporter->fill($request->validated());
         $supporter->site_id = $site->id;
         $supporter->save();
