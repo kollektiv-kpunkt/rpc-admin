@@ -10,6 +10,7 @@
                 <th>{{ __('E-Mail') }}</th>
                 <th>{{ __('Rolle') }}</th>
                 <th>{{ __('Status') }}</th>
+                <th>{{ __('Seiten') }}</th>
                 <th>{{ __('Aktionen') }}</th>
             </tr>
             @foreach ($users as $user)
@@ -18,6 +19,7 @@
                     <td>{{ $user->email }}</td>
                     <td>{{ $user->role }}</td>
                     <td>{{ ($user->admin_activation || $user->role == "admin" ) ? "aktiv" : "inaktiv" }}</td>
+                    <td>{{ implode(", ", $user->sites)}}
                     <td>
                         <form action="{{ route('users.destroy', $user) }}" method="POST">
                             @csrf
