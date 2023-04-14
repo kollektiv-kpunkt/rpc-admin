@@ -86,8 +86,31 @@ class UserController extends Controller
 
     public function WPUser(Request $request)
     {
-        return response()->json(
-            $request->all()
-        )
+        $site = \App\Models\Site::findInAny($request->site);
+        if (!$site) {
+            return response()->json([
+                "error" => "Site not found"
+            ]);
+        }
+        $user = User::where('email', $request->email)->first();
+        if ($user) {
+            $user->sites = array_merge($user->sites, [$site->id]);
+            $user->save();
+        } else {
+            $user = User::create([
+                "name" => $request->name,
+                "email" => $request->email,
+                "role" => "user",
+                "password" => bcrypt($request->password),
+                "sites" => [$site->id]
+            ]);
+        }
+
+        return response()->json([
+            "id" => $user->id,
+            "email" => $user->email,
+            "name" => $user->name,
+            "role" => $user->role
+        ]);
     }
 }
