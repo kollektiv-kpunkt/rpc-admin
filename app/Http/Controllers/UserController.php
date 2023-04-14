@@ -123,10 +123,14 @@ class UserController extends Controller
         }
 
         return response()->json([
-            "id" => $user->id,
-            "email" => $user->email,
-            "name" => $user->name,
-            "role" => $user->role
+            "status" => "ok",
+            "code" => 200,
+            "data" => [
+                "id" => $user->id,
+                "email" => $user->email,
+                "name" => $user->name,
+                "role" => $user->role
+            ]
         ]);
     }
 }
