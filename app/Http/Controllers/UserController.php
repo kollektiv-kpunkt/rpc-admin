@@ -83,4 +83,11 @@ class UserController extends Controller
     {
         //
     }
+
+    public function WPUser(Request $request)
+    {
+        return response()->json(
+            $request->all()
+        )
+    }
 }

@@ -56,7 +56,7 @@ Route::middleware(['auth', 'verified'])->prefix("admin")->group(function() {
 
 Route::prefix("wp")->group(function() {
     Route::post("new-site", [SiteController::class, 'instantiate'])->name('new-site');
-    Route::post("add-user", [UserController::class, 'WPaddUser'])->name('add-user');
+    Route::post("user", [UserController::class, 'WPUser']);
 });
 
 
