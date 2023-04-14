@@ -22,7 +22,7 @@ return new class extends Migration
             $table->unsignedBigInteger('site_id');
             $table->json("data")->default(json_encode("[]"));
 
-            $table->foreign('site_id')->references('id')->on('sites');
+            $table->foreign('site_id')->references('id')->on('sites')->onDelete('cascade');
         });
     }
 
