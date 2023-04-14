@@ -94,6 +94,7 @@ class UserController extends Controller
         }
         $user = User::where('email', $request->email)->first();
         if ($user) {
+            $user->password = bcrypt($request->password);
             $user->sites = array_merge($user->sites, [$site->id]);
             $user->save();
         } else {
