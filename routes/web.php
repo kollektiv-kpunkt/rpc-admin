@@ -43,6 +43,7 @@ Route::middleware(['auth', 'verified'])->prefix("admin")->group(function() {
 
     Route::resource('supporters', SupporterController::class);
     Route::put('supporters/{supporter}/activate', [SupporterController::class, 'activate'])->name('supporters.activate');
+    Route::put('supporters/{supporter}/deactivate', [SupporterController::class, 'deactivate'])->name('supporters.deactivate');
 
     Route::middleware("site")->prefix("sites")->group(function () {
         Route::get('{site}/supporters', function(){

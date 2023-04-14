@@ -34,6 +34,12 @@
                             @method('PUT')
                             <button type="submit" class="text-green-500 hover:text-green-700">{{ __('Aktivieren') }}</button>
                         </form>
+                        @else
+                        <form action="{{ route('supporters.deactivate', [$supporter]) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <button type="submit" class="text-orange-500 hover:text-orange-700">{{ __('Deaktivieren') }}</button>
+                        </form>
                         @endif
                     </td>
                 </tr>

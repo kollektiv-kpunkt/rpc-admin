@@ -168,6 +168,16 @@ class SupporterController extends Controller
     }
 
     /**
+     * Deactivate a supporter
+     */
+    public function deactivate(Supporter $supporter)
+    {
+        $supporter->status = "inactive";
+        $supporter->save();
+        return redirect()->route('sites.supporters', $supporter->site_id);
+    }
+
+    /**
      * Export Supporters as CSV
      */
     public function export(Site $site)
