@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SiteController;
+use App\Http\Controllers\SupporterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,10 +39,18 @@ Route::middleware(['auth', 'verified'])->prefix("admin")->group(function() {
         Route::resource('sites', SiteController::class);
     });
 
+    Route::resource('supporters', SupporterController::class);
+    Route::put('supporters/{supporter}/activate', [SupporterController::class, 'activate'])->name('supporters.activate');
+
     Route::middleware("site")->prefix("sites")->group(function () {
         Route::get('{site}/supporters', function(){
-            return view("sites.supporters");
+            return view("sites.supporters", [
+                "site" => \App\Models\Site::find(request()->route('site')),
+                "supporters" => \App\Models\Supporter::where('site_id', request()->route('site'))->get()
+            ]);
         })->name('sites.supporters');
+
+        Route::get('{site}/supporters/export', [SupporterController::class, "export"])->name('sites.supporters.export');
     });
 });
 
