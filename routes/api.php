@@ -24,6 +24,6 @@ Route::get("/heartbeat", function () {
 });
 
 Route::prefix("supporters")->group( function() {
-    Route::get("{site}", [SupporterController::class, 'ApiGet']);
+    Route::middleware("sitekey")->get("{site}", [SupporterController::class, 'ApiGet']);
     Route::post("{site}", [SupporterController::class, 'ApiPost']);
 });
