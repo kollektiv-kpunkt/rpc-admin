@@ -126,10 +126,12 @@ class UserController extends Controller
             "status" => "ok",
             "code" => 200,
             "data" => [
-                "id" => $user->id,
-                "email" => $user->email,
-                "name" => $user->name,
-                "role" => $user->role
+                "user" => [
+                    "id" => $user->id,
+                    "email" => $user->email,
+                    "name" => $user->name,
+                    "role" => $user->role
+                ]
             ]
         ]);
     }
