@@ -19,7 +19,7 @@ use App\Http\Controllers\SupporterController;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 Route::middleware(['auth', 'verified'])->prefix("admin")->group(function() {
     Route::get("/", function () {
@@ -54,6 +54,10 @@ Route::middleware(['auth', 'verified'])->prefix("admin")->group(function() {
     });
 });
 
-Route::post("/new-site", [SiteController::class, 'instantiate'])->name('new-site');
+Route::prefix("wp")->group(function() {
+    Route::post("new-site", [SiteController::class, 'instantiate'])->name('new-site');
+    Route::post("add-user", [UserController::class, 'WPaddUser'])->name('add-user');
+});
+
 
 require __DIR__.'/auth.php';

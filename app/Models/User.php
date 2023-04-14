@@ -42,7 +42,8 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'sites' => 'array'
+        'sites' => 'array',
+        "admin_activation" => "boolean"
     ];
 
     public function hasRole(string $role): bool
