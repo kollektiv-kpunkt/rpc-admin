@@ -19,6 +19,7 @@
                 <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="$supporter->email" required autofocus />
                 <x-input-error :messages="$errors->get('name')" class="mt-2" />
             </div>
+            <hr class="border-0 border-t-2 border-t-gray-300 my-4"/>
             @foreach ($supporter->data as $key => $field)
                 <div>
                     <x-input-label for="data[{{$key}}]" :value="__('Benutzerdefiniertes Feld: ') . $key" />
