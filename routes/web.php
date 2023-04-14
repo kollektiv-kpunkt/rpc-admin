@@ -47,7 +47,7 @@ Route::middleware(['auth', 'verified'])->prefix("admin")->group(function() {
     Route::middleware("site")->prefix("sites")->group(function () {
         Route::get('{site}/supporters', function(){
             return view("sites.supporters", [
-                "site" => \App\Models\Site::find(request()->route('site')),
+                "site" => \App\Models\Site::findInAny(request()->route('site')),
                 "supporters" => \App\Models\Supporter::where('site_id', request()->route('site'))->get()
             ]);
         })->name('sites.supporters');
