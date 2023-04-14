@@ -28,7 +28,7 @@
                             @method('DELETE')
                             <button type="submit" class="text-red-500 hover:text-red-700">{{ __('Löschen') }}</button>
                         </form>
-                        @if ($supporter->status === 'pending')
+                        @if ($supporter->status != 'active')
                         <form action="{{ route('supporters.activate', [$supporter]) }}" method="POST">
                             @csrf
                             @method('PUT')
