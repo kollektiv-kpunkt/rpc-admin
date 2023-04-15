@@ -108,7 +108,7 @@ class SupporterController extends Controller
             "email" => "required|email",
             "data" => "required|array"
         ]);
-        $supporter->fill($validated);
+        $supporter->update($validated);
         $supporter->save();
         return redirect()->route("supporters.index", ["site"=>$site]);
     }
@@ -168,7 +168,7 @@ class SupporterController extends Controller
         } else {
             $supporter = new Supporter();
         }
-        $supporter->fill($request->validated());
+        $supporter->update($request->validated());
         $supporter->site_id = $site->id;
         return response()->json([
             "code" => 200,
