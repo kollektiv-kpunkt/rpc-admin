@@ -4,6 +4,7 @@
 
     function addField() {
         let e = window.event;
+        e.preventDefault();
         let input = document.createElement("input");
         input.type = "text";
         input.name = "";
@@ -13,12 +14,13 @@
         input.classList.add("block", "mt-1", "w-full");
         e.target.parentNode.insertBefore(input, e.target);
         e.target.innerHTML = "{{__("Feld hinzufügen")}}";
-        e.target.onclick = function (){
-            createField(input)
+        e.target.onclick = function (e){
+            createField(e, input)
         };
     }
 
-    function createField(input) {
+    function createField(e, input) {
+        e.preventDefault();
         if (input.value === "") {
             alert("{{__("Bitte einen Namen für das Feld eingeben")}}");
             return;
