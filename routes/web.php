@@ -21,7 +21,7 @@ Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
-Route::middleware(['auth', 'verified'])->prefix("admin")->group(function() {
+Route::middleware(['auth'])->prefix("admin")->group(function() {
     Route::get("/", function () {
         return redirect()->route('dashboard');
     })->name('home');
