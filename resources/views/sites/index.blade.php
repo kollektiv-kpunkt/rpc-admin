@@ -32,7 +32,7 @@
                             @method('DELETE')
                             <button type="submit" class="underline text-red-600">{{ __('Löschen') }}</button>
                         </form>
-                        <a href="{{ route('sites.supporters.index', $site) }}" class="underline text-green-500">{{ __('Supporters') }}</a>
+                        <a href="{{ route('supporters.index', $site) }}" class="underline text-green-500">{{ __('Supporters') }}</a>
                     </td>
                 </tr>
             @endforeach

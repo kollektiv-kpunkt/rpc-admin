@@ -23,6 +23,14 @@ class Site extends Model
         return in_array($user->id, $this->users);
     }
 
+    /**
+     * Get the supporters for the site.
+     */
+    public function supporters()
+    {
+        return $this->hasMany(Supporter::class);
+    }
+
     public $casts = [
         "users" => "array"
     ];
@@ -41,5 +49,19 @@ class Site extends Model
         } else {
             return $site;
         }
+    }
+
+    /**
+     * Get all supporter custom fields for the site.
+     */
+    public function supporterCustomFields()
+    {
+        $supporters = $this->supporters;
+        $fields = [];
+        foreach ($supporters as $supporter) {
+            array_push($fields, array_keys($supporter->data));
+        }
+        $fields = array_unique(array_merge(...$fields));
+        return $fields;
     }
 }

@@ -16,7 +16,8 @@ class Supporter extends Model
         "uuid",
         "name",
         "email",
-        "data"
+        "data",
+        "site_id"
     ];
 
     public function site()

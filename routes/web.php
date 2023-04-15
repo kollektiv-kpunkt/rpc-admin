@@ -41,16 +41,14 @@ Route::middleware(['auth'])->prefix("admin")->group(function() {
         Route::resource('sites', SiteController::class);
     });
 
-    Route::resource('supporters', SupporterController::class);
-    Route::put('supporters/{supporter}/activate', [SupporterController::class, 'activate'])->name('supporters.activate');
-    Route::put('supporters/{supporter}/deactivate', [SupporterController::class, 'deactivate'])->name('supporters.deactivate');
 
     Route::middleware("site")->prefix("sites")->group(function () {
         Route::prefix("{site}")->group(function() {
-            Route::get('supporters', [SupporterController::class, "index"])->name('sites.supporters.index');
-            Route::get('supporters/edit/{supporter}', [SupporterController::class, "edit"])->name('sites.supporters.edit');
-            Route::put('supporters/edit/{supporter}', [SupporterController::class, "update"])->name('sites.supporters.update');
-            Route::get('supporters/export', [SupporterController::class, "export"])->name('sites.supporters.export');
+            Route::resource('supporters', SupporterController::class);
+
+            Route::put('supporters/{supporter}/activate', [SupporterController::class, 'activate'])->name('supporters.activate');
+            Route::put('supporters/{supporter}/deactivate', [SupporterController::class, 'deactivate'])->name('supporters.deactivate');
+            Route::get('supporters/export', [SupporterController::class, "export"])->name('supporters.export');
         });
     });
 });

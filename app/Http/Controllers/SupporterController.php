@@ -29,9 +29,13 @@ class SupporterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Site $site)
     {
-        //
+        $customFields = $site->supporterCustomFields();
+        return view("sites.supporters.create", [
+            "site" => $site,
+            "customFields" => $customFields
+        ]);
     }
 
     /**
@@ -42,7 +46,18 @@ class SupporterController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            "uuid" => "required|string",
+            "name" => "required|string",
+            "email" => "required|email",
+            "data" => "required|array",
+            "site_id" => "required|integer"
+        ]);
+        if (!auth()->user()->hasAccessToSite($validated["site_id"]) && !auth()->user()->hasRole("admin")) {
+            abort(403);
+        }
+        $supporter = Supporter::create($validated);
+        return redirect()->route("supporters.index", $validated["site_id"]);
     }
 
     /**
@@ -64,9 +79,11 @@ class SupporterController extends Controller
      */
     public function edit(Site $site, Supporter $supporter)
     {
+        $customFields = $site->supporterCustomFields();
         return view("sites.supporters.edit", [
             "site" => $site,
-            "supporter" => $supporter
+            "supporter" => $supporter,
+            "customFields" => $customFields
         ]);
     }
 
@@ -87,7 +104,7 @@ class SupporterController extends Controller
         ]);
         $supporter->fill($validated);
         $supporter->save();
-        return redirect()->route("sites.supporters.index", ["site"=>$site]);
+        return redirect()->route("supporters.index", ["site"=>$site]);
     }
 
     /**
@@ -96,10 +113,10 @@ class SupporterController extends Controller
      * @param  \App\Models\Supporter  $supporter
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Supporter $supporter)
+    public function destroy(Site $site, Supporter $supporter)
     {
         $supporter->delete();
-        return redirect()->route('sites.supporters.index', $supporter->site_id);
+        return redirect()->route('supporters.index', $supporter->site_id);
     }
 
     /**
@@ -158,21 +175,21 @@ class SupporterController extends Controller
     /**
      * Activate a supporter
      */
-    public function activate(Supporter $supporter)
+    public function activate(Site $site, Supporter $supporter)
     {
         $supporter->status = "active";
         $supporter->save();
-        return redirect()->route('sites.supporters.index', $supporter->site_id);
+        return redirect()->route('supporters.index', $supporter->site_id);
     }
 
     /**
      * Deactivate a supporter
      */
-    public function deactivate(Supporter $supporter)
+    public function deactivate(Site $site, Supporter $supporter)
     {
         $supporter->status = "inactive";
         $supporter->save();
-        return redirect()->route('sites.supporters.index', $supporter->site_id);
+        return redirect()->route('supporters.index', $supporter->site_id);
     }
 
     /**
@@ -182,7 +199,7 @@ class SupporterController extends Controller
     {
         $supporters = Supporter::where('site_id', $site->id)->get();
         if (!$supporters->count()) {
-            return redirect()->route('sites.supporters.index', $site->id);
+            return redirect()->route('supporters.index', $site->id);
         }
         $filename = "supporters-" . $site->name . "-" . date("Y-m-d") . ".csv";
         $fields = [
@@ -194,12 +211,7 @@ class SupporterController extends Controller
             "updated_at",
             "status"
         ];
-        foreach($supporters as $supporter) {
-            foreach ($supporter->data as $key => $field) {
-                $fields[] = $key;
-            }
-        }
-        $fields = array_unique($fields);
+        $fields = array_merge($fields, $site->supporterCustomFields());
         $handle = fopen($filename, 'w+');
         fputcsv($handle, $fields);
 
