@@ -17,7 +17,7 @@ class SiteMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $site = Site::findInAny($request->route()->parameter("site"));
+        $site = Site::findInAnyOrFail($request->route()->parameter("site"));
         if (auth()->user()->role == "admin") {
             return $next($request);
         }
