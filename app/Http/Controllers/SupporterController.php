@@ -64,6 +64,7 @@ class SupporterController extends Controller
      */
     public function edit(Site $site, Supporter $supporter)
     {
+        dd($site, $supporter);
         return view("sites.supporters.edit", [
             "site" => $site,
             "supporter" => $supporter
