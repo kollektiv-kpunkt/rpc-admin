@@ -17,11 +17,11 @@ class SiteMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $site = Site::findInAnyOrFail($request->route()->parameter("site"));
+        $site = request()->route()->parameter("site");
         if (auth()->user()->role == "admin") {
             return $next($request);
         }
-        if (!auth()->user()->hasAccessToSite($site->id)) {
+        if (!auth()->user()->hasAccessToSite($site)) {
             return redirect()->route('dashboard');
         }
         return $next($request);

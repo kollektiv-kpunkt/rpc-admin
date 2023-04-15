@@ -51,9 +51,8 @@ class User extends Authenticatable
         return $this->role === $role;
     }
 
-    public function hasAccessToSite($site): bool
+    public function hasAccessToSite(Site $site): bool
     {
-        $site = \App\Models\Site::findInAnyOrFail($site);
         $siteId = $site->id;
         return in_array($siteId, $this->sites);
     }
