@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use App\Models\Site;
 
 class SiteMiddleware
 {
@@ -16,10 +17,11 @@ class SiteMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+        $site = Site::findInAny($request->route()->parameter("site"));
         if (auth()->user()->role == "admin") {
             return $next($request);
         }
-        if (!auth()->user()->hasAccessToSite(request()->site)) {
+        if (!auth()->user()->hasAccessToSite($site->id)) {
             return redirect()->route('dashboard');
         }
         return $next($request);
