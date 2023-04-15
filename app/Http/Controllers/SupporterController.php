@@ -112,8 +112,7 @@ class SupporterController extends Controller
         $supportersQuery = Supporter::where('site_id', $site->id)->where("status", "active")->whereJsonContains('data', ['public' => "1"]);
         if (request()->has("sort")) {
             $sort = request()->input("sort");
-            $order = request()->input("order") || "asc";
-            dd($sort, $order);
+            $order = request()->input("order") ?? "asc";
             $supportersQuery->orderBy($sort, $order);
         }
         $supporters = $supportersQuery->get();
