@@ -172,6 +172,7 @@ class SupporterController extends Controller
             $supporter->fill($request->validated());
         }
         $supporter->site_id = $site->id;
+        $supporter->save();
         return response()->json([
             "code" => 200,
             "status" => "ok",
