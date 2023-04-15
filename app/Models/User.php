@@ -53,6 +53,9 @@ class User extends Authenticatable
 
     public function hasAccessToSite(Site $site): bool
     {
+        if (gettype($this->sites) === "string") {
+            $site = \App\Models\Site::findInAnyOrFail($site);
+        }
         $siteId = $site->id;
         return in_array($siteId, $this->sites);
     }
