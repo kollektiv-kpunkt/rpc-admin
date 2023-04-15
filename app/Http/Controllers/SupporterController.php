@@ -163,12 +163,14 @@ class SupporterController extends Controller
         $site = \App\Models\Site::findInAnyOrFail($site);
         if (Supporter::where("uuid", $data["uuid"])->where("site_id", $site->id)->first()) {
             $supporter = Supporter::where("uuid", $data["uuid"])->first();
+            $supporter->update($request->validated());
         } else if (Supporter::where("email", $data["email"])->where("site_id", $site->id)->first()) {
             $supporter = Supporter::where("email", $data["email"])->first();
+            $supporter->update($request->validated());
         } else {
             $supporter = new Supporter();
+            $supporter->fill($request->validated());
         }
-        $supporter->update($request->validated());
         $supporter->site_id = $site->id;
         return response()->json([
             "code" => 200,
