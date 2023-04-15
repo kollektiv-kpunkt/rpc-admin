@@ -109,7 +109,7 @@ class SupporterController extends Controller
     {
 
         $site = \App\Models\Site::findInAnyOrFail($site);
-        $supporters = Supporter::where('site_id', $site->id)->where("status", "active")->whereJsonContains('data', ['public' => true])->get();
+        $supporters = Supporter::where('site_id', $site->id)->where("status", "active")->whereJsonContains('data', ['public' => "1"])->get();
         return response()->json([
             "code" => 200,
             "status" => "ok",
