@@ -44,11 +44,10 @@ Route::middleware(['auth'])->prefix("admin")->group(function() {
 
     Route::middleware("site")->prefix("sites")->group(function () {
         Route::prefix("{site}")->group(function() {
-            Route::resource('supporters', SupporterController::class);
-
             Route::put('supporters/{supporter}/activate', [SupporterController::class, 'activate'])->name('supporters.activate');
             Route::put('supporters/{supporter}/deactivate', [SupporterController::class, 'deactivate'])->name('supporters.deactivate');
             Route::get('supporters/export', [SupporterController::class, "export"])->name('supporters.export');
+            Route::resource('supporters', SupporterController::class);
         });
     });
 });
