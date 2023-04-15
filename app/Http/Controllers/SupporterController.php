@@ -56,7 +56,13 @@ class SupporterController extends Controller
         if (!auth()->user()->hasAccessToSite($validated["site_id"]) && !auth()->user()->hasRole("admin")) {
             abort(403);
         }
-        $supporter = Supporter::create($validated);
+        try {
+            $supporter = Supporter::create($validated);
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->getCode() == 23000) {
+                abort(409, "Supporter already exists");
+            }
+        }
         return redirect()->route("supporters.index", $validated["site_id"]);
     }
 
@@ -155,13 +161,15 @@ class SupporterController extends Controller
     {
         $data = $request->validated();
         $site = \App\Models\Site::findInAnyOrFail($site);
-        $supporter = Supporter::where("uuid", $data["uuid"])->first();
-        if (!$supporter) {
+        if (Supporter::where("uuid", $data["uuid"])->where("site_id", $site->id)->first()) {
+            $supporter = Supporter::where("uuid", $data["uuid"])->first();
+        } else if (Supporter::where("email", $data["email"])->where("site_id", $site->id)->first()) {
+            $supporter = Supporter::where("email", $data["email"])->first();
+        } else {
             $supporter = new Supporter();
         }
         $supporter->fill($request->validated());
         $supporter->site_id = $site->id;
-        $supporter->save();
         return response()->json([
             "code" => 200,
             "status" => "ok",
