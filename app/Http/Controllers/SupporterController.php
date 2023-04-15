@@ -109,7 +109,13 @@ class SupporterController extends Controller
     {
 
         $site = \App\Models\Site::findInAnyOrFail($site);
-        $supporters = Supporter::where('site_id', $site->id)->where("status", "active")->whereJsonContains('data', ['public' => "1"])->get();
+        $supportersQuery = Supporter::where('site_id', $site->id)->where("status", "active")->whereJsonContains('data', ['public' => "1"]);
+        if (request()->has("sort")) {
+            $sort = request()->input("sort");
+            $order = request()->input("order") || "asc";
+            $supportersQuery->orderBy($sort, $order);
+        }
+        $supporters = $supportersQuery->get();
         return response()->json([
             "code" => 200,
             "status" => "ok",
