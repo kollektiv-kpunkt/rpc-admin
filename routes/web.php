@@ -45,7 +45,7 @@ Route::middleware(['auth'])->prefix("admin")->group(function() {
     Route::put('supporters/{supporter}/activate', [SupporterController::class, 'activate'])->name('supporters.activate');
     Route::put('supporters/{supporter}/deactivate', [SupporterController::class, 'deactivate'])->name('supporters.deactivate');
 
-    Route::middleware("site")->prefix("sites")->group(function () {
+    Route::prefix("sites")->group(function () {
         Route::prefix("{site}")->group(function() {
             Route::get('supporters', [SupporterController::class, "index"])->name('sites.supporters.index');
             Route::get('supporters/edit/{supporter}', [SupporterController::class, "edit"])->name('sites.supporters.edit');
