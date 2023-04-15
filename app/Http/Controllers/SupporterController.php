@@ -113,6 +113,7 @@ class SupporterController extends Controller
         if (request()->has("sort")) {
             $sort = request()->input("sort");
             $order = request()->input("order") || "asc";
+            dd($sort, $order);
             $supportersQuery->orderBy($sort, $order);
         }
         $supporters = $supportersQuery->get();
